@@ -20,10 +20,6 @@ add_library(${NAMESPACE_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 generate_export_header(${PROJECT_NAME}
     EXPORT_FILE_NAME ${PROJECT_NAME}/${PROJECT_NAME}_export.h
     )
-set(public_header_files
-    include/cppLibrary/library_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME}_export.h
-    )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     LANGUAGES CXX
@@ -32,11 +28,15 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     CXX_EXTENSIONS OFF
     VERSION ${CPP_LIBRARY_VERSION_STRING}
     SOVERSION ${CPP_LIBRARY_VERSION_MAJOR}
-    PUBLIC_HEADER "${public_header_files}"
     CXX_VISIBILITY_PRESET hidden
     VISIBILITY_INLINES_HIDDEN 1
     )
 target_sources(${PROJECT_NAME}
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include/${PROJECT_NAME}/library_wrapper.h>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME}_export.h>
+        $<INSTALL_INTERFACE:include/${PROJECT_NAME}/library_wrapper.h>
+        $<INSTALL_INTERFACE:include/${PROJECT_NAME}/${PROJECT_NAME}_export.h>
     PRIVATE
         src/library_wrapper.cpp
         src/library.h
@@ -65,6 +65,9 @@ install(TARGETS ${PROJECT_NAME}
     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME} COMPONENT Development
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     )
+install(
+    FILES ${CMAKE_CURRENT_LIST_DIR}/include/${PROJECT_NAME}/library_wrapper.h;${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME}_export.h
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
 
 install(EXPORT ${PROJECT_NAME}Targets
   FILE
