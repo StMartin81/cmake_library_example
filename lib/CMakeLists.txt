@@ -24,6 +24,11 @@ set(public_header_files
     include/cppLibrary/library_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME}_export.h
     )
+set(source_files
+        src/library_wrapper.cpp
+        src/library.h
+        src/library.cpp
+    )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     LANGUAGES CXX
@@ -38,9 +43,8 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     )
 target_sources(${PROJECT_NAME}
     PRIVATE
-        src/library_wrapper.cpp
-        src/library.h
-        src/library.cpp
+        ${public_header_files}
+        ${source_files}
     )
 
 # Define headers for this library. PUBLIC headers are used for
