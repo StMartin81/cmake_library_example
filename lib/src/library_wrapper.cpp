@@ -10,7 +10,7 @@ size_t createLibrary()
 {
     std::unique_ptr<Library> libraryPtr{std::make_unique < Library >() };
     size_t handle{std::hash<std::unique_ptr<Library>>()(libraryPtr)};
-    instances.insert(std::pair<size_t, std::unique_ptr<Library>>{handle, std::move(libraryPtr)});
+    instances.insert(std::make_pair(handle, std::move(libraryPtr)));
     return handle;
 }
 
